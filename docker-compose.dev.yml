@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL para desarrollo
+  postgres_dev:
+    image: postgres:15
+    container_name: audite_postgres_dev
+    environment:
+      POSTGRES_DB: audite_dev
+      POSTGRES_USER: audite_user
+      POSTGRES_PASSWORD: audite_password_dev
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"  # Puerto diferente para no conflictos
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./audite/scripts/init_dev_data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U audite_user -d audite_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Opcional: Adminer para administrar la BD visualmente
+  adminer:
+    image: adminer
+    container_name: audite_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_dev
+
+volumes:
+  postgres_dev_data:

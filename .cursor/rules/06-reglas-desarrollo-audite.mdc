@@ -1,0 +1,75 @@
+---
+alwaysApply: true
+---
+
+# Reglas de Desarrollo AuditE - Cumplimiento Obligatorio
+
+## 🎯 REGLAS FUNDAMENTALES DEL PROYECTO
+
+### ✅ REGLA 1: Seguimiento del Plan
+- **SIEMPRE** consultar [PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md](mdc:PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md) antes de cualquier desarrollo
+- **NUNCA** implementar funcionalidades fuera del plan establecido
+- **OBLIGATORIO** marcar tareas como `[x]` solo cuando estén 100% completas y funcionando
+
+### ✅ REGLA 2: Compatibilidad con Sistema Actual
+- **MANTENER** funcionando el flujo actual: [Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx) → `/diagnostico` → [AutodiagnosticoPage.tsx](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/AutodiagnosticoPage.tsx)
+- **PRESERVAR** todas las APIs existentes en [config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+- **NO TOCAR** el sistema de [FairDiagnostic](mdc:audite-frontend-explorer/src/pages/FairDiagnostic/) (es experimental)
+
+### ✅ REGLA 3: Estructura de Archivos
+- **USAR** exactamente las ubicaciones especificadas en el plan
+- **RESPETAR** la arquitectura actual de carpetas
+- **EXTENDER** sin romper la estructura existente
+
+### ✅ REGLA 4: Backend Development
+- **SEGUIR** el patrón existente: models.py → schemas.py → crud.py → routers/
+- **USAR** las mismas convenciones de [app/routers/autodiagnostico.py](mdc:audite/app/routers/autodiagnostico.py)
+- **INCLUIR** en [app/main.py](mdc:audite/app/main.py) todos los nuevos routers
+
+### ✅ REGLA 5: Frontend Development
+- **REUTILIZAR** la lógica de [useAutodiagnostico.ts](mdc:audite-frontend-explorer/src/hooks/useAutodiagnostico.ts)
+- **SEGUIR** el patrón de componentes de [src/pages/Autodiagnostico/](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/)
+- **USAR** shadcn/ui components y Tailwind CSS
+
+### ✅ REGLA 6: Preguntas Condicionales
+- **IMPLEMENTAR** evaluación tanto en frontend como backend
+- **VALIDAR** lógica condicional para evitar loops infinitos
+- **SOPORTAR** operadores: "=", "!=", "includes", "not_includes"
+
+### ✅ REGLA 7: Campos "Otro"
+- **MOSTRAR** input dinámico cuando se selecciona "Otro"
+- **VALIDAR** campos "Otro" si son requeridos
+- **GUARDAR** por separado del valor principal de la respuesta
+
+## 🚫 PROHIBICIONES CRÍTICAS
+
+### ❌ NO TOCAR (Código Legacy/Experimental):
+- **feriaService** en [src/lib/legacyApi.ts](mdc:audite-frontend-explorer/src/lib/legacyApi.ts)
+- **Páginas de FairDiagnostic** en [src/pages/FairDiagnostic/](mdc:audite-frontend-explorer/src/pages/FairDiagnostic/)
+- **URLs que no están en config/api.ts**
+
+### ❌ NUNCA HACER:
+- Modificar APIs existentes que funcionan
+- Cambiar la estructura de respuestas actuales
+- Romper la autenticación admin existente
+- Crear archivos fuera de las ubicaciones del plan
+
+## 🔄 WORKFLOW DE DESARROLLO OBLIGATORIO
+
+### ANTES de cada commit:
+1. ✅ Verificar que el plan está actualizado con tareas marcadas
+2. ✅ Confirmar que el sistema actual sigue funcionando
+3. ✅ Validar que nuevas funcionalidades no rompen existentes
+4. ✅ Actualizar observaciones en el plan si es necesario
+
+### DESPUÉS de cada implementación:
+1. ✅ Probar funcionalidad implementada
+2. ✅ Verificar integración con sistema existente
+3. ✅ Marcar tarea como completa `[x]` en el plan
+4. ✅ Documentar cualquier cambio o decisión técnica
+
+## 📋 REFERENCIAS CLAVE
+- **Plan principal:** [PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md](mdc:PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md)
+- **APIs funcionales:** [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+- **Flujo principal:** [src/pages/Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx) → [src/hooks/useAutodiagnostico.ts](mdc:audite-frontend-explorer/src/hooks/useAutodiagnostico.ts)
+- **Admin panel:** [src/pages/Admin/AdminDashboard.tsx](mdc:audite-frontend-explorer/src/pages/Admin/AdminDashboard.tsx)

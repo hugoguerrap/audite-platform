@@ -1,0 +1,115 @@
+---
+alwaysApply: true
+---
+# Módulo Autodiagnóstico - Core del Producto
+
+## 🎯 ARQUITECTURA DEL AUTODIAGNÓSTICO
+
+### 📱 Frontend (100% Funcional)
+```typescript
+// FLUJO PRINCIPAL:
+[src/pages/Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx) 
+  → Link to="/diagnostico" 
+  → [src/pages/Autodiagnostico/AutodiagnosticoPage.tsx](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/AutodiagnosticoPage.tsx)
+  → [src/hooks/useAutodiagnostico.ts](mdc:audite-frontend-explorer/src/hooks/useAutodiagnostico.ts)
+  → [src/pages/Autodiagnostico/AutodiagnosticoComplete.tsx](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/AutodiagnosticoComplete.tsx)
+```
+
+### 🖥️ Backend (100% Funcional)
+```python
+# ENDPOINTS ACTIVOS:
+[app/routers/autodiagnostico.py](mdc:audite/app/routers/autodiagnostico.py)
+  → GET /autodiagnostico/preguntas           # Preguntas públicas
+  → POST /autodiagnostico/responder          # Enviar respuestas
+  → GET /autodiagnostico/sugerencias/{id}    # Obtener sugerencias
+```
+
+## 🔄 FLUJO DE DATOS
+
+### 📊 Ciclo de Vida de una Sesión
+1. **Inicio**: `useAutodiagnostico` genera UUID de sesión
+2. **Carga**: `fetchPreguntas()` obtiene preguntas activas del admin
+3. **Interacción**: Usuario responde paso a paso
+4. **Envío**: `submitRespuestas()` envía todas las respuestas
+5. **Sugerencias**: `fetchSugerencias()` obtiene recomendaciones
+6. **Contacto**: WhatsApp/Email predefinidos
+
+### 🎛️ Gestión Admin → Frontend
+```typescript
+// SINCRONIZACIÓN AUTOMÁTICA:
+Admin crea pregunta → Aparece inmediatamente en /diagnostico
+Admin desactiva pregunta → Desaparece del formulario
+Admin modifica opciones → Se actualiza en tiempo real
+```
+
+## 🧩 COMPONENTES CLAVE
+
+### 🎯 AutodiagnosticoPage.tsx
+- **Estado**: Gestiona currentStep, progress, sessionId
+- **Navegación**: Maneja next/prev con validación
+- **Envío**: Coordina el envío final de respuestas
+- **Error handling**: Loading states y error management
+
+### 🎣 useAutodiagnostico.ts Hook
+```typescript
+// FUNCIONES PRINCIPALES:
+fetchPreguntas()         // Carga preguntas dinámicas
+saveRespuesta()          // Guarda respuesta local
+submitRespuestas()       // Envía al backend
+fetchSugerencias()       // Obtiene recomendaciones
+generateSessionId()      // UUID único por sesión
+```
+
+### ✅ AutodiagnosticoComplete.tsx
+- **Sugerencias**: Muestra recomendaciones personalizadas
+- **Contacto**: Enlaces a WhatsApp/Email
+- **Restart**: Opción de comenzar nuevo diagnóstico
+
+## 📋 TIPOS DE PREGUNTAS SOPORTADAS
+
+### 🎛️ Configuración Dinámica (desde Admin)
+```typescript
+// TIPOS DISPONIBLES:
+'radio'       // Selección única
+'checkbox'    // Selección múltiple  
+'text'        // Texto libre
+'number'      // Números
+'select'      // Dropdown
+'ordering'    // Ordenamiento (especial)
+```
+
+### 💡 Sistema de Sugerencias
+- **Sugerencias por opción**: Cada respuesta puede tener sugerencia específica
+- **Generación automática**: Backend procesa respuestas y genera sugerencias
+- **Contacto directo**: Enlaces para continuar con asesoría
+
+## 🔧 MODIFICACIONES SEGURAS
+
+### ✅ Puedes modificar:
+- **UI/UX** de los componentes en [src/pages/Autodiagnostico/](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/)
+- **Lógica de navegación** en AutodiagnosticoPage.tsx
+- **Estilos y animaciones**
+- **Textos y copy**
+- **Enlaces de contacto**
+
+### 🚫 NO toques:
+- **URLs de API** (están en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts))
+- **Lógica de sessionId** (crítica para tracking)
+- **Estructura de respuestas** (debe coincidir con backend)
+- **Hook useAutodiagnostico** (a menos que sepas lo que haces)
+
+## 📊 DEBUGGING
+
+### 🔍 Logs útiles:
+```typescript
+// EN useAutodiagnostico.ts:
+console.log('SessionId enviado:', sessionId);
+console.log('Respuestas a enviar:', respuestasParaEnviar);
+console.log('Sugerencias recibidas:', data.sugerencias);
+```
+
+### 🐛 Problemas comunes:
+1. **SessionId undefined** → Verificar generateSessionId()
+2. **Sugerencias no cargan** → Verificar que sessionId sea válido
+3. **Preguntas no aparecen** → Verificar que admin las activó
+4. **Navegación rota** → Verificar isCurrentStepValid()

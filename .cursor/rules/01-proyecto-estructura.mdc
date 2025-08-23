@@ -1,0 +1,51 @@
+---
+alwaysApply: true
+---
+# Proyecto AuditE - Estructura y Funcionamiento Real
+
+## 🎯 PRODUCTO PRINCIPAL
+AuditE es una plataforma de autodiagnósticos energéticos con:
+- **Frontend React/TypeScript** en [audite-frontend-explorer/](mdc:audite-frontend-explorer/)
+- **Backend FastAPI** en [audite/](mdc:audite/) 
+- **Base de datos PostgreSQL** (DigitalOcean)
+
+## ✅ LO QUE ESTÁ ACTIVO Y FUNCIONA
+
+### 🏠 Flujo Principal del Usuario
+```
+Home → /diagnostico → AutodiagnosticoPage → Sugerencias
+```
+- **Landing**: [src/pages/Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx)
+- **Autodiagnóstico**: [src/pages/Autodiagnostico/](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/)
+- **Hook principal**: [src/hooks/useAutodiagnostico.ts](mdc:audite-frontend-explorer/src/hooks/useAutodiagnostico.ts)
+
+### 👑 Panel de Administración
+```
+/admin → Login → Dashboard → Gestión de Preguntas/Respuestas/Estadísticas
+```
+- **Login admin**: [src/pages/Admin/AdminLogin.tsx](mdc:audite-frontend-explorer/src/pages/Admin/AdminLogin.tsx)
+- **Dashboard**: [src/pages/Admin/AdminDashboard.tsx](mdc:audite-frontend-explorer/src/pages/Admin/AdminDashboard.tsx)
+- **Hooks admin**: [src/hooks/useAdminAuth.ts](mdc:audite-frontend-explorer/src/hooks/useAdminAuth.ts) y [src/hooks/useAdminQuestions.ts](mdc:audite-frontend-explorer/src/hooks/useAdminQuestions.ts)
+
+### 🔐 Autenticación Opcional
+- **Sistema JWT**: [src/pages/Login.tsx](mdc:audite-frontend-explorer/src/pages/Login.tsx) y [src/pages/Register.tsx](mdc:audite-frontend-explorer/src/pages/Register.tsx)
+- **Dashboard usuarios**: [src/pages/Dashboard.tsx](mdc:audite-frontend-explorer/src/pages/Dashboard.tsx)
+- **Auditorías**: [src/pages/BasicAudit/](mdc:audite-frontend-explorer/src/pages/BasicAudit/) y [src/pages/AgroAudit/](mdc:audite-frontend-explorer/src/pages/AgroAudit/)
+
+## ❌ LO QUE SON EXPERIMENTOS (NO TOCAR)
+
+### 🚫 Diagnóstico de Feria (URLs rotas)
+- [src/pages/FairDiagnostic/](mdc:audite-frontend-explorer/src/pages/FairDiagnostic/) - **EXPERIMENTO NO FUNCIONAL**
+- [src/lib/legacyApi.ts](mdc:audite-frontend-explorer/src/lib/legacyApi.ts) - feriaService con URLs incorrectas
+- Rutas: `/diagnostico-energia`, `/codigo/:accessCode`, `/buscar-diagnostico` - **NO ENLAZADAS**
+
+### ⚠️ Código Legacy
+- Cualquier referencia a `/feria/*` endpoints
+- Componentes en FairDiagnostic que usan feriaService
+- URLs que no están en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+
+## 🔧 CONFIGURACIÓN CLAVE
+- **API URLs**: [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+- **Backend main**: [app/main.py](mdc:audite/app/main.py)
+- **Modelos DB**: [app/models.py](mdc:audite/app/models.py)
+- **Routers backend**: [app/routers/](mdc:audite/app/routers/)

@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+# AuditE - Overview Rápido
+
+## 🎯 QUÉ ES AUDITE
+**Plataforma de autodiagnósticos energéticos** donde los usuarios responden preguntas dinámicas y reciben sugerencias personalizadas.
+
+## ⚡ FLUJO PRINCIPAL (LO QUE REALMENTE SE USA)
+```
+1. Usuario llega a Home
+2. Clic "Realizar Autodiagnóstico" 
+3. Responde preguntas dinámicas (gestionadas por admin)
+4. Recibe sugerencias personalizadas
+5. Contacta por WhatsApp/Email si quiere más info
+```
+
+## 🏗️ ARQUITECTURA REAL
+- **Frontend**: React + TypeScript + shadcn/ui
+- **Backend**: FastAPI + PostgreSQL 
+- **Admin Panel**: CRUD completo de preguntas/respuestas
+- **URLs**: Centralizadas en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+
+## ✅ LO QUE FUNCIONA 100%
+- **Autodiagnóstico público** ([/diagnostico](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/))
+- **Panel admin** ([/admin](mdc:audite-frontend-explorer/src/pages/Admin/))
+- **Autenticación opcional** (para dashboard de usuarios)
+- **Auditorías básicas/agro** (si usuario se registra)
+
+## ❌ LO QUE NO FUNCIONAR (EXPERIMENTOS)
+- **FairDiagnostic** ([src/pages/FairDiagnostic/](mdc:audite-frontend-explorer/src/pages/FairDiagnostic/)) → URLs rotas
+- **feriaService** ([src/lib/legacyApi.ts](mdc:audite-frontend-explorer/src/lib/legacyApi.ts)) → No se usa desde Home
+
+## 🚫 REGLA DE ORO
+**Si no está enlazado desde [Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx) o no usa APIs de [config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts), probablemente es un experimento.**

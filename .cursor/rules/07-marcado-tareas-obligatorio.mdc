@@ -1,0 +1,139 @@
+---
+alwaysApply: true
+---
+# Marcado de Tareas - Protocolo Obligatorio
+
+## 🎯 PROTOCOLO OBLIGATORIO DE MARCADO
+
+### ✅ ANTES DE MARCAR UNA TAREA COMO COMPLETA
+
+#### PASO 1: Verificación Técnica
+- [ ] **Código implementado** según especificaciones exactas del plan
+- [ ] **Funcionalidad probada** y confirmada funcionando
+- [ ] **Sin errores** de compilación, linting o runtime
+- [ ] **Integración** con sistema existente verificada
+
+#### PASO 2: Verificación de Compatibilidad
+- [ ] **Sistema actual** sigue funcionando (flujo principal de AuditE)
+- [ ] **APIs existentes** no han sido modificadas/rotas
+- [ ] **No hay regresiones** en funcionalidades existentes
+
+#### PASO 3: Documentación de la Tarea
+- [ ] **Observaciones** agregadas en campo correspondiente
+- [ ] **Decisiones técnicas** documentadas si aplica
+- [ ] **Problemas encontrados** y soluciones registradas
+- [ ] **Tiempo real** vs estimado si es relevante
+
+### ✅ FORMATO DE MARCADO CORRECTO
+
+#### Tarea NO Completada:
+```markdown
+- [ ] **Tarea:** Descripción de la tarea
+  - [ ] Subtarea 1
+  - [ ] Subtarea 2
+  - [ ] **Observaciones:**
+```
+
+#### Tarea COMPLETADA:
+```markdown
+- [x] **Tarea:** Descripción de la tarea
+  - [x] Subtarea 1
+  - [x] Subtarea 2
+  - [x] **Observaciones:** Implementado correctamente. Sin problemas encontrados.
+```
+
+#### Tarea con Problemas:
+```markdown
+- [x] **Tarea:** Descripción de la tarea
+  - [x] Subtarea 1
+  - [x] Subtarea 2
+  - [x] **Observaciones:** Implementado con modificación: cambié X por Y debido a Z. Funciona correctamente.
+```
+
+## 🔄 WORKFLOW DE MARCADO ESPECÍFICO
+
+### 1. ANTES de implementar:
+```bash
+# Leer el plan y identificar tarea
+1. Abrir: PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md
+2. Localizar tarea específica en la fase correspondiente
+3. Verificar que prerequisitos están marcados como [x]
+4. Confirmar ubicación de archivos y especificaciones técnicas
+```
+
+### 2. DURANTE la implementación:
+```bash
+# Seguir exactamente las especificaciones
+1. Usar ubicaciones de archivos especificadas
+2. Implementar según detalles técnicos del plan
+3. Mantener compatibilidad con sistema actual
+4. Probar funcionalidad paso a paso
+```
+
+### 3. DESPUÉS de implementar:
+```bash
+# Verificar y marcar
+1. Probar funcionalidad completa
+2. Verificar que sistema actual sigue funcionando
+3. Actualizar checkbox: [ ] → [x]
+4. Agregar observaciones detalladas
+5. Confirmar que siguiente tarea puede proceder
+```
+
+## 🚫 PROHIBICIONES DE MARCADO
+
+### ❌ NUNCA marcar como completada una tarea que:
+- No funciona completamente
+- Rompe funcionalidad existente
+- No cumple especificaciones del plan
+- No ha sido probada adecuadamente
+- Tiene errores conocidos
+
+### ❌ NUNCA omitir:
+- Verificación de compatibilidad
+- Documentación en observaciones
+- Prueba de integración
+- Actualización del checkbox
+
+## 📋 TEMPLATE DE OBSERVACIONES
+
+### Para tareas simples:
+```
+**Observaciones:** Implementado según especificaciones. Funciona correctamente.
+```
+
+### Para tareas complejas:
+```
+**Observaciones:** 
+- Implementado modelo CategoriaIndustria con todos los campos especificados
+- Agregado en models.py línea 150-170
+- Relaciones con FormularioIndustria funcionando
+- Próximo paso: crear migración Alembic
+```
+
+### Para tareas con modificaciones:
+```
+**Observaciones:** 
+- Implementado con ajuste: cambié campo 'color' de String(20) a String(7) para formato hex
+- Razón: hex colors son máximo 7 caracteres (#FFFFFF)
+- Funcionalidad completa y probada
+- Sin impacto en otras funcionalidades
+```
+
+## 🎯 CONTROL DE CALIDAD
+
+### Antes de marcar [x] pregúntate:
+1. ¿Funciona la implementación al 100%?
+2. ¿He probado la integración con el sistema actual?
+3. ¿He documentado cualquier decisión técnica tomada?
+4. ¿Pueden proceder las siguientes tareas con lo implementado?
+5. ¿He verificado que no rompí nada existente?
+
+### Si alguna respuesta es NO:
+- ❌ **NO marques la tarea como completa**
+- 🔧 **Completa lo que falta**
+- ✅ **Solo entonces marca como [x]**
+
+---
+
+**RECUERDA:** El plan es nuestro contrato técnico. Cada checkbox marcado es un compromiso de calidad y funcionalidad.

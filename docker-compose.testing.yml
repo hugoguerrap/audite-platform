@@ -1,0 +1,184 @@
+# 🚀 STACK COMPLETO AUDITE - OPTIMIZADO PARA TESTING
+# =================================================
+
+services:
+  # 🗄️ Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: audite_postgres_testing
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: audite_test
+      POSTGRES_USER: audite_user
+      POSTGRES_PASSWORD: audite_password_test_2024
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./audite/scripts/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+      - ./init_test_data.sql:/docker-entrypoint-initdb.d/02_test_data.sql
+    networks:
+      - audite_test_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U audite_user -d audite_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # 🚀 Backend FastAPI  
+  backend:
+    build:
+      context: ./audite
+      dockerfile: Dockerfile.dev
+    container_name: audite_backend_testing
+    restart: unless-stopped
+    environment:
+      # Base de datos
+      - DATABASE_URL=postgresql://audite_user:audite_password_test_2024@postgres:5432/audite_test
+      - ENVIRONMENT=testing
+      
+      # Autenticación
+      - JWT_SECRET_KEY=audite_testing_jwt_secret_key_super_secure_32_chars_minimum
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      
+      # Admin credentials
+      - ADMIN_USERNAME=admin_audite
+      - ADMIN_PASSWORD=AdminTest2024
+      
+      # CORS
+      - CORS_ORIGINS=http://localhost:18080,http://127.0.0.1:18080,http://frontend:3000
+      
+      # Configuración
+      - LOG_LEVEL=INFO
+      - SKIP_DB_SETUP=false
+    ports:
+      - "18000:8000"
+    volumes:
+      - ./audite/app:/app/app:cached
+      - ./audite/alembic:/app/alembic:cached  
+      - ./audite/alembic.ini:/app/alembic.ini:ro
+      - ./audite/requirements.txt:/app/requirements.txt:ro
+    networks:
+      - audite_test_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: >
+      sh -c "
+        echo '🔄 Esperando base de datos...' &&
+        sleep 10 &&
+        echo '🗄️ Ejecutando migraciones...' &&
+        alembic upgrade head &&
+        echo '🚀 Iniciando servidor FastAPI...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level info
+      "
+
+  # ⚛️ Frontend React
+  frontend:
+    build:
+      context: ./audite-frontend-explorer
+      dockerfile: Dockerfile.dev
+    container_name: audite_frontend_testing
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=http://localhost:18000
+      - VITE_NODE_ENV=development
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3000
+    ports:
+      - "18080:3000"  # Mapeo: host:container
+    volumes:
+      - ./audite-frontend-explorer/src:/app/src:cached
+      - ./audite-frontend-explorer/public:/app/public:cached
+      - ./audite-frontend-explorer/package.json:/app/package.json:ro
+      - ./audite-frontend-explorer/vite.config.ts:/app/vite.config.ts:ro
+      - ./audite-frontend-explorer/tailwind.config.ts:/app/tailwind.config.ts:ro
+      - ./audite-frontend-explorer/tsconfig.json:/app/tsconfig.json:ro
+      - /app/node_modules  # Volume anónimo para node_modules
+    networks:
+      - audite_test_network
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    command: >
+      sh -c "
+        echo '📦 Instalando dependencias del frontend...' &&
+        npm install --silent &&
+        echo '🔧 Generando tipos...' &&
+        npm run build:types 2>/dev/null || true &&
+        echo '🚀 Iniciando servidor de desarrollo (Vite)...' &&
+        npm run dev -- --host 0.0.0.0 --port 3000
+      "
+
+  # 🗄️ Adminer - Administrador de BD
+  adminer:
+    image: adminer:4.8.1-standalone
+    container_name: audite_adminer_testing
+    restart: unless-stopped
+    ports:
+      - "18081:8080"
+    networks:
+      - audite_test_network
+    depends_on:
+      - postgres
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: pepa-linha-dark
+      ADMINER_PLUGINS: tables-filter tinymce
+
+  # 📊 Monitoreo opcional - Nginx para proxy reverso
+  nginx:
+    image: nginx:alpine
+    container_name: audite_nginx_testing  
+    restart: unless-stopped
+    ports:
+      - "18090:80"
+      - "18443:443"
+    volumes:
+      - ./nginx-testing.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - audite_test_network
+    depends_on:
+      - frontend
+      - backend
+    profiles:
+      - monitoring
+
+  # 🔍 Logs centralizados
+  logs:
+    image: dozzle/dozzle:latest
+    container_name: audite_logs_testing
+    restart: unless-stopped
+    ports:
+      - "18082:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    profiles:
+      - monitoring
+
+volumes:
+  postgres_test_data:
+    driver: local
+    name: audite_postgres_test_data
+
+networks:
+  audite_test_network:
+    driver: bridge
+    name: audite_test_network

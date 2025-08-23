@@ -1,0 +1,54 @@
+---
+alwaysApply: true
+---
+
+# Plan de Implementación - Workflow Obligatorio
+
+## 🎯 REGLA FUNDAMENTAL
+**ANTES de realizar CUALQUIER tarea de desarrollo, SIEMPRE debes:**
+
+### ✅ PASO 1: Leer el Plan Actual
+1. **Abrir y leer** [PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md](mdc:PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md)
+2. **Identificar** en qué fase del plan estamos
+3. **Localizar** la tarea específica que se va a ejecutar
+4. **Entender** las dependencias y prerequisitos
+
+### ✅ PASO 2: Verificar Estado Actual
+1. **Revisar** qué tareas están marcadas como completadas `[x]`
+2. **Confirmar** que los prerequisitos están cumplidos
+3. **Identificar** la siguiente tarea lógica a ejecutar
+4. **Validar** que tienes toda la información necesaria
+
+### ✅ PASO 3: Ejecutar la Tarea
+1. **Seguir exactamente** las especificaciones del plan
+2. **Usar las ubicaciones** de archivos especificadas
+3. **Implementar** según los detalles técnicos documentados
+4. **Mantener** compatibilidad con sistema existente
+
+### ✅ PASO 4: Marcar como Completada
+1. **Actualizar** el checkbox `[ ]` → `[x]` en el plan
+2. **Agregar observaciones** si es necesario
+3. **Documentar** cualquier desviación o problema encontrado
+4. **Confirmar** que la tarea funciona antes de marcar como completa
+
+## 🚫 PROHIBICIONES ABSOLUTAS
+- ❌ **NUNCA** saltar tareas sin completar prerequisitos
+- ❌ **NUNCA** modificar estructura sin consultar el plan
+- ❌ **NUNCA** marcar como completa una tarea que no funciona
+- ❌ **NUNCA** crear archivos en ubicaciones diferentes a las especificadas
+
+## 🔄 FLUJO DE TRABAJO EJEMPLO
+```
+1. Usuario solicita: "Implementar modelo CategoriaIndustria"
+2. Agent lee plan → Fase 1.1.1
+3. Agent verifica prerequisitos cumplidos
+4. Agent implementa según especificaciones exactas
+5. Agent marca tarea como [x] y agrega observaciones
+6. Agent confirma que siguiente tarea puede proceder
+```
+
+## 📋 ESTADO DEL PLAN
+**Ubicación:** [PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md](mdc:PLAN_IMPLEMENTACION_FORMULARIOS_INDUSTRIA.md)
+**Fases totales:** 10
+**Tareas estimadas:** 100+
+**Seguimiento:** Obligatorio en cada commit

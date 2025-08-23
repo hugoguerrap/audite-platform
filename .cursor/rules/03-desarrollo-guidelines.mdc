@@ -1,0 +1,84 @@
+---
+alwaysApply: true
+---
+# Guías de Desarrollo AuditE
+
+## 🎯 FLUJO DE DESARROLLO SEGURO
+
+### ✅ Áreas SEGURAS para modificar
+1. **Autodiagnóstico** - [src/pages/Autodiagnostico/](mdc:audite-frontend-explorer/src/pages/Autodiagnostico/)
+2. **Panel Admin** - [src/pages/Admin/](mdc:audite-frontend-explorer/src/pages/Admin/)
+3. **Home/Landing** - [src/pages/Home.tsx](mdc:audite-frontend-explorer/src/pages/Home.tsx)
+4. **Hooks funcionales** - [src/hooks/useAutodiagnostico.ts](mdc:audite-frontend-explorer/src/hooks/useAutodiagnostico.ts), [src/hooks/useAdminAuth.ts](mdc:audite-frontend-explorer/src/hooks/useAdminAuth.ts)
+5. **Config API** - [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+6. **Routers backend** - [app/routers/autodiagnostico.py](mdc:audite/app/routers/autodiagnostico.py), [app/routers/admin_auth.py](mdc:audite/app/routers/admin_auth.py)
+
+### 🚫 Áreas PROHIBIDAS (Experimentos)
+1. **FairDiagnostic completo** - [src/pages/FairDiagnostic/](mdc:audite-frontend-explorer/src/pages/FairDiagnostic/)
+2. **feriaService** - [src/lib/legacyApi.ts](mdc:audite-frontend-explorer/src/lib/legacyApi.ts) líneas 173-287
+3. **Rutas no enlazadas** - `/diagnostico-energia`, `/codigo/*`, `/buscar-diagnostico`
+4. **Backend feria** - [app/routers/diagnostico_feria.py](mdc:audite/app/routers/diagnostico_feria.py)
+
+## 🔧 PATRONES DE DESARROLLO
+
+### 📱 Frontend
+```typescript
+// ESTRUCTURA ESTÁNDAR:
+1. Hook personalizado para lógica de negocio
+2. Componente principal con UI
+3. Tipos en [src/types/](mdc:audite-frontend-explorer/src/types/)
+4. API calls desde hooks, NO desde componentes
+5. URLs centralizadas en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+```
+
+### 🖥️ Backend
+```python
+# ESTRUCTURA ESTÁNDAR:
+1. Router en [app/routers/](mdc:audite/app/routers/)
+2. Modelos en [app/models.py](mdc:audite/app/models.py)
+3. Schemas en [app/schemas.py](mdc:audite/app/schemas.py)
+4. CRUD en [app/crud.py](mdc:audite/app/crud.py)
+5. Include router en [app/main.py](mdc:audite/app/main.py)
+```
+
+## 📋 CHECKLIST ANTES DE MODIFICAR
+
+### ✅ Antes de tocar código:
+1. **¿Es parte del flujo principal?** (Home → Autodiagnóstico → Admin)
+2. **¿Las URLs están en config/api.ts?**
+3. **¿No toca nada de FairDiagnostic?**
+4. **¿Sigue los patrones existentes?**
+
+### 🚫 Señales de PELIGRO:
+1. **URLs con `/feria/`** → NO TOCAR
+2. **feriaService.** → NO TOCAR
+3. **Componentes en FairDiagnostic/** → NO TOCAR
+4. **URLs hardcodeadas** → MOVER a config/api.ts
+
+## 🎨 ESTÁNDARES DE UI/UX
+
+### 🎨 Diseño
+- **shadcn/ui components** obligatorio
+- **Tailwind CSS** para estilos
+- **Lucide icons** para iconografía
+- **Responsive design** siempre
+
+### 💫 UX
+- **Loading states** con spinners
+- **Error handling** con toasts
+- **Feedback inmediato** en acciones
+- **Validación en tiempo real**
+
+## 🔍 DEBUGGING
+
+### 🐛 Si algo no funciona:
+1. **Verificar URL en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)**
+2. **Revisar Network tab** en DevTools
+3. **Comprobar autenticación** (admin vs usuario)
+4. **Verificar que no sea código de FairDiagnostic**
+
+### 📊 Logs útiles:
+- Console.log en hooks para debugging
+- Network requests en DevTools
+- Backend logs en terminal
+- Estado de autenticación en localStorage

@@ -1,0 +1,79 @@
+---
+alwaysApply: true
+---
+# APIs Funcionales de AuditE
+
+## ✅ ENDPOINTS QUE FUNCIONAN 100%
+
+### 🎯 Autodiagnóstico (Flujo Principal)
+```typescript
+// URLs en [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+GET  /autodiagnostico/preguntas                    // Cargar preguntas dinámicas
+POST /autodiagnostico/responder                    // Enviar respuestas usuario
+GET  /autodiagnostico/sugerencias/{sessionId}      // Obtener sugerencias
+GET  /autodiagnostico/sesion/{sessionId}           // Estado de sesión
+```
+
+### 👑 Panel Administración
+```typescript
+// Login admin
+POST /admin/auth/login                             // Autenticación admin
+POST /admin/auth/verify                            // Verificar token
+POST /admin/auth/refresh                           // Renovar token
+
+// Gestión de preguntas
+GET    /autodiagnostico/admin/preguntas            // Listar preguntas
+POST   /autodiagnostico/admin/preguntas            // Crear pregunta
+PUT    /autodiagnostico/admin/preguntas/{id}       // Editar pregunta
+DELETE /autodiagnostico/admin/preguntas/{id}       // Eliminar pregunta
+
+// Análisis y estadísticas
+GET /autodiagnostico/admin/respuestas              // Ver respuestas usuarios
+GET /autodiagnostico/admin/estadisticas            // Métricas del sistema
+```
+
+### 🔐 Autenticación Usuario (Opcional)
+```typescript
+POST /auth/token                                   // Login usuario
+POST /auth/register                                // Registro usuario
+GET  /auth/me                                      // Info usuario actual
+```
+
+### 📊 Auditorías (Si usuario registrado)
+```typescript
+// Auditorías básicas
+GET    /auditoria-basica/                          // Listar auditorías
+POST   /auditoria-basica/                          // Crear auditoría
+GET    /auditoria-basica/{id}                      // Detalles auditoría
+PUT    /auditoria-basica/{id}                      // Actualizar
+DELETE /auditoria-basica/{id}                      // Eliminar
+
+// Auditorías agro
+GET    /auditoria-agro/                            // Listar auditorías agro
+POST   /auditoria-agro/                            // Crear auditoría agro
+GET    /auditoria-agro/{id}                        // Detalles auditoría
+PUT    /auditoria-agro/{id}                        // Actualizar
+DELETE /auditoria-agro/{id}                        // Eliminar
+```
+
+## ❌ ENDPOINTS QUE NO FUNCIONAN (NO USAR)
+
+### 🚫 Diagnóstico de Feria (URLs incorrectas)
+```typescript
+// Estas URLs en [src/lib/legacyApi.ts](mdc:audite-frontend-explorer/src/lib/legacyApi.ts) están ROTAS:
+❌ /feria/iniciar-contacto/                        // NO EXISTE
+❌ /feria/completar-diagnostico/                   // NO EXISTE  
+❌ /feria/buscar-diagnostico/{accessCode}          // NO EXISTE
+❌ /feria/resultados/{diagnosticoId}               // NO EXISTE
+
+// Las URLs correctas del backend son:
+✅ POST /api/diagnosticos-feria/                   // Pero NO se usan
+✅ GET  /api/diagnosticos-feria/{id}               // Pero NO se usan
+```
+
+## 🔑 REGLA CLAVE
+**SI NECESITAS AGREGAR FUNCIONALIDAD:**
+1. **Usa solo las APIs que están en esta lista ✅**
+2. **NO toques nada de `/feria/*` o `feriaService`**
+3. **Todas las URLs deben estar definidas en** [src/config/api.ts](mdc:audite-frontend-explorer/src/config/api.ts)
+4. **Si necesitas nueva API, créala siguiendo el patrón del autodiagnóstico**
