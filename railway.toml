@@ -1,0 +1,19 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./audite/Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "backend"
+build = "./audite"
+port = 8000
+
+[[services]]
+name = "frontend"
+build = "./audite-frontend-explorer"
+port = 5173
